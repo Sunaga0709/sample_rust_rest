@@ -1,0 +1,38 @@
+get:
+  description: "ユーザー一覧取得する"
+  summary: "ユーザー一覧取得API"
+  operationId: users-v1-get
+  tags:
+    - user
+  responses:
+    "200":
+      description: "成功"
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                name:
+                  type: string
+                age:
+                  type: integer
+                  minimum: 0
+                email:
+                  type: string
+                  format: email
+              required:
+                - user_id
+                - name 
+                - age 
+                - email
+    "500":
+      description: "失敗"
+      # $ref: ../openapi.yaml#components/schemas/error
+      content:
+        applicatoin/json:
+          schema:
+            $ref: ../schemas/error.yaml

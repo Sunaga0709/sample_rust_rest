@@ -1,0 +1,13 @@
+openapi: "3.0.3"
+info:
+  title: sample rust openapi server
+  version: "1.0"
+tags:
+  - name: user
+paths:
+  /v1/users:
+    $ref: ./paths/users.yaml
+components:
+  schemas:
+    error:
+      $ref: ../schemas/error.yaml

@@ -1,0 +1,31 @@
+type: object
+description: エラー時response用スキーマ
+properties:
+  error:
+    type: object
+    properties:
+      errors:
+        type: array
+        items:
+          type: object
+          properties:
+            domain:
+              type: string
+              example: domain
+              description: ドメイン
+            reason:
+              type: string
+              example: InternalError
+              description: エラーコード
+            message:
+              type: string
+              example: エラーが発生しました。再試行しても解消しない場合は、サポートセンターまでご連絡ください。
+              description: エラーメッセージ
+      code:
+        type: integer
+        example: 500
+        description: HTTPステータス
+      message:
+        type: string
+        example: エラーが発生しました。再試行しても解消しない場合は、サポートセンターまでご連絡ください。
+        description: エラーメッセージ

@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: sample rust openapi server
+  version: "1.0"
+servers:
+- url: /
+tags:
+- name: user
+paths:
+  /v1/users:
+    get:
+      description: ユーザー一覧取得する
+      operationId: users-v1-get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/users_v1_get_200_response_inner'
+                type: array
+          description: 成功
+        "500":
+          content:
+            applicatoin/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: 失敗
+      summary: ユーザー一覧取得API
+      tags:
+      - user
+components:
+  schemas:
+    error:
+      description: エラー時response用スキーマ
+      properties:
+        error:
+          $ref: '#/components/schemas/error_error'
+      type: object
+    users_v1_get_200_response_inner:
+      example:
+        user_id: user_id
+        name: name
+        age: 0
+        email: email
+      properties:
+        user_id:
+          type: string
+        name:
+          type: string
+        age:
+          minimum: 0
+          type: integer
+        email:
+          format: email
+          type: string
+      required:
+      - age
+      - email
+      - name
+      - user_id
+      type: object
+    error_error_errors_inner:
+      properties:
+        domain:
+          description: ドメイン
+          example: domain
+          type: string
+        reason:
+          description: エラーコード
+          example: InternalError
+          type: string
+        message:
+          description: エラーメッセージ
+          example: エラーが発生しました。再試行しても解消しない場合は、サポートセンターまでご連絡ください。
+          type: string
+      type: object
+    error_error:
+      properties:
+        errors:
+          items:
+            $ref: '#/components/schemas/error_error_errors_inner'
+          type: array
+        code:
+          description: HTTPステータス
+          example: 500
+          type: integer
+        message:
+          description: エラーメッセージ
+          example: エラーが発生しました。再試行しても解消しない場合は、サポートセンターまでご連絡ください。
+          type: string
+      type: object
+
