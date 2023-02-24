@@ -19,7 +19,7 @@ properties:
               description: エラーコード
             message:
               type: string
-              example: エラーが発生しました。再試行しても解消しない場合は、サポートセンターまでご連絡ください。
+              example: エラーが発生しました。。
               description: エラーメッセージ
       code:
         type: integer
@@ -27,5 +27,5 @@ properties:
         description: HTTPステータス
       message:
         type: string
-        example: エラーが発生しました。再試行しても解消しない場合は、サポートセンターまでご連絡ください。
+        example: エラーが発生しました。。
         description: エラーメッセージ
