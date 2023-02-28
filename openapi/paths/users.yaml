@@ -31,7 +31,6 @@ get:
                 - email
     "500":
       description: "失敗"
-      # $ref: ../openapi.yaml#components/schemas/error
       content:
         applicatoin/json:
           schema:

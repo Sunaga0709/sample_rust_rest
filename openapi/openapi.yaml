@@ -7,7 +7,6 @@ tags:
 paths:
   /v1/users:
     $ref: ./paths/users.yaml
-components:
-  schemas:
-    error:
-      $ref: ../schemas/error.yaml
+
+  /v1/users/{user_id}:
+    $ref: ./paths/usersById.yaml

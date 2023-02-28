@@ -29,6 +29,38 @@ paths:
       summary: ユーザー一覧取得API
       tags:
       - user
+  /v1/users/{user_id}:
+    get:
+      description: 詳細を取得する
+      operationId: users-by-id-v1-get
+      parameters:
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/users_v1_get_200_response_inner'
+          description: 成功
+        "404":
+          content:
+            applicatoin/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: 失敗
+        "500":
+          content:
+            applicatoin/json:
+              schema:
+                $ref: '#/components/schemas/error'
+          description: 失敗
+      summary: ユーザー詳細取得API
+      tags:
+      - user
 components:
   schemas:
     error:
@@ -72,7 +104,7 @@ components:
           type: string
         message:
           description: エラーメッセージ
-          example: エラーが発生しました。再試行しても解消しない場合は、サポートセンターまでご連絡ください。
+          example: エラーが発生しました。。
           type: string
       type: object
     error_error:
@@ -87,7 +119,7 @@ components:
           type: integer
         message:
           description: エラーメッセージ
-          example: エラーが発生しました。再試行しても解消しない場合は、サポートセンターまでご連絡ください。
+          example: エラーが発生しました。。
           type: string
       type: object
 

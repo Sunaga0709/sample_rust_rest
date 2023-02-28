@@ -14,7 +14,7 @@ To see how to make this your own, look here:
 [README]((https://openapi-generator.tech))
 
 - API version: 1.0
-- Build date: 2023-02-25T07:56:50.816700+09:00[Asia/Tokyo]
+- Build date: 2023-02-26T02:55:09.185412+09:00[Asia/Tokyo]
 
 
 
@@ -61,6 +61,7 @@ cargo run --example server
 To run a client, follow one of the following simple steps:
 
 ```
+cargo run --example client UsersByIdV1Get
 cargo run --example client UsersV1Get
 ```
 
@@ -95,6 +96,7 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**users-by-id-v1-get**](docs/user_api.md#users-by-id-v1-get) | **GET** /v1/users/{user_id} | ユーザー詳細取得API
 [**users-v1-get**](docs/user_api.md#users-v1-get) | **GET** /v1/users | ユーザー一覧取得API
 
 

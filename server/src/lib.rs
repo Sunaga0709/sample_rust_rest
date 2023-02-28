@@ -16,6 +16,22 @@ pub const API_VERSION: &str = "1.0";
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 #[must_use]
+pub enum UsersByIdV1GetResponse {
+    /// 成功
+    Status200
+    (models::UsersV1Get200ResponseInner)
+    ,
+    /// 失敗
+    Status404
+    (String)
+    ,
+    /// 失敗
+    Status500
+    (String)
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[must_use]
 pub enum UsersV1GetResponse {
     /// 成功
     Status200
@@ -34,6 +50,12 @@ pub trait Api<C: Send + Sync> {
         Poll::Ready(Ok(()))
     }
 
+    /// ユーザー詳細取得API
+    async fn users_by_id_v1_get(
+        &self,
+        user_id: String,
+        context: &C) -> Result<UsersByIdV1GetResponse, ApiError>;
+
     /// ユーザー一覧取得API
     async fn users_v1_get(
         &self,
@@ -49,6 +71,12 @@ pub trait ApiNoContext<C: Send + Sync> {
     fn poll_ready(&self, _cx: &mut Context) -> Poll<Result<(), Box<dyn Error + Send + Sync + 'static>>>;
 
     fn context(&self) -> &C;
+
+    /// ユーザー詳細取得API
+    async fn users_by_id_v1_get(
+        &self,
+        user_id: String,
+        ) -> Result<UsersByIdV1GetResponse, ApiError>;
 
     /// ユーザー一覧取得API
     async fn users_v1_get(
@@ -78,6 +106,16 @@ impl<T: Api<C> + Send + Sync, C: Clone + Send + Sync> ApiNoContext<C> for Contex
 
     fn context(&self) -> &C {
         ContextWrapper::context(self)
+    }
+
+    /// ユーザー詳細取得API
+    async fn users_by_id_v1_get(
+        &self,
+        user_id: String,
+        ) -> Result<UsersByIdV1GetResponse, ApiError>
+    {
+        let context = self.context().clone();
+        self.api().users_by_id_v1_get(user_id, &context).await
     }
 
     /// ユーザー一覧取得API

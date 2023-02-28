@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  app:
+    container_name: sample-rust-rest-app
+    build: ./docker/rust
+    tty: true
+    volumes:
+      - ../server:/app
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    networks:
+      - sample-rust-rest-net
+
+  db:
+    container_name: sample-rust-rest-db
+    platform: linux/x86_64
+    build: ./docker/mysql
+    volumes:
+      - sample-rust-rest-db:/var/lib/mysql
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    networks:
+      - sample-rust-rest-net
+
+networks:
+  sample-rust-rest-net:
+    driver: bridge
+
+volumes:
+  sample-rust-rest-db:

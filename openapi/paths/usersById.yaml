@@ -1,0 +1,47 @@
+get: 
+  description: 詳細を取得する
+  summary: ユーザー詳細取得API
+  operationId: users-by-id-v1-get
+  tags:
+    - user
+  parameters:
+    - name: user_id
+      in: path
+      schema:
+        type: string
+      required: true
+  responses:
+    "200":
+      description: 成功
+      content: 
+        application/json:
+          schema:
+            type: object
+            properties:
+              user_id:
+                type: string
+              name:
+                type: string
+              age:
+                type: integer
+                minimum: 0
+              email:
+                type: string
+                format: email
+            required:
+              - user_id
+              - name 
+              - age 
+              - email
+    "404":
+      description: "失敗"
+      content:
+        applicatoin/json:
+          schema:
+            $ref: ../schemas/error.yaml
+    "500":
+      description: "失敗"
+      content:
+        applicatoin/json:
+          schema:
+            $ref: ../schemas/error.yaml

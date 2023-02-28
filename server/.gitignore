@@ -1,6 +1,2 @@
 target
 Cargo.lock
-.DS_Store
-examples/*
-.env
-docs/*

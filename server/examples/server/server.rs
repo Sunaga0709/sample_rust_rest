@@ -94,8 +94,8 @@ impl<C> Server<C> {
 
 use openapi_client::{
     Api,
-    UsersV1GetResponse,
     UsersByIdV1GetResponse,
+    UsersV1GetResponse,
 };
 use openapi_client::server::MakeService;
 use std::error::Error;
@@ -104,6 +104,17 @@ use swagger::ApiError;
 #[async_trait]
 impl<C> Api<C> for Server<C> where C: Has<XSpanIdString> + Send + Sync
 {
+    /// ユーザー詳細取得API
+    async fn users_by_id_v1_get(
+        &self,
+        user_id: String,
+        context: &C) -> Result<UsersByIdV1GetResponse, ApiError>
+    {
+        let context = context.clone();
+        info!("users_by_id_v1_get(\"{}\") - X-Span-ID: {:?}", user_id, context.get().0.clone());
+        Err(ApiError("Generic failure".into()))
+    }
+
     /// ユーザー一覧取得API
     async fn users_v1_get(
         &self,
@@ -114,15 +125,4 @@ impl<C> Api<C> for Server<C> where C: Has<XSpanIdString> + Send + Sync
         Err(ApiError("Generic failure".into()))
     }
 
-    /// ユーザー詳細取得API
-    async fn users_by_id_v1_get(
-        &self,
-        user_id: String,
-        context: &C) -> Result<UsersByIdV1GetResponse, ApiError>
-    {
-        println!("path parameter: {}", user_id);
-        let context = context.clone();
-        info!("users_by_isv1_get() - X-Span-ID: {:?}", context.get().0.clone());
-        Err(ApiError("Generic failure".into()))
-    }
 }
