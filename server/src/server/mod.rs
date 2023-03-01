@@ -26,6 +26,7 @@ use crate::{Api,
      UsersV1GetResponse
 };
 
+// ↓　ルータ？
 mod paths {
     use lazy_static::lazy_static;
 
@@ -85,6 +86,7 @@ impl<T, C, Target> hyper::service::Service<Target> for MakeService<T, C> where
     }
 }
 
+// エラーレスポンス(405)
 fn method_not_allowed() -> Result<Response<Body>, crate::ServiceError> {
     Ok(
         Response::builder().status(StatusCode::METHOD_NOT_ALLOWED)
@@ -137,6 +139,7 @@ impl<T, C> hyper::service::Service<(Request<Body>, C)> for Service<T, C> where
         self.api_impl.poll_ready(cx)
     }
 
+    // この中の該当の関数にハンドラなどを追加していく　
     fn call(&mut self, req: (Request<Body>, C)) -> Self::Future { async fn run<T, C>(mut api_impl: T, req: (Request<Body>, C)) -> Result<Response<Body>, crate::ServiceError> where
         T: Api<C> + Clone + Send + 'static,
         C: Has<XSpanIdString>  + Send + Sync + 'static
@@ -232,17 +235,26 @@ impl<T, C> hyper::service::Service<(Request<Body>, C)> for Service<T, C> where
 
             // UsersV1Get - GET /v1/users
             hyper::Method::GET if path.matched(paths::ID_V1_USERS) => {
+                                println!("called /v1/users !!!");
+                                
+                                // ↓ハンドラ？
                                 let result = api_impl.users_v1_get(
                                         &context
                                     ).await;
+                                
+                                // 空のレスポンス生成
                                 let mut response = Response::new(Body::empty());
+                                
+                                // 生成したレスポンスに返したいものを入れていく
                                 response.headers_mut().insert(
                                             HeaderName::from_static("x-span-id"),
                                             HeaderValue::from_str((&context as &dyn Has<XSpanIdString>).get().0.clone().as_str())
                                                 .expect("Unable to create X-Span-ID header value"));
 
                                         match result {
+                                            // 成功時のレスポンス(エラーレスポンス含む)
                                             Ok(rsp) => match rsp {
+                                                // ステータスコードが200
                                                 UsersV1GetResponse::Status200
                                                     (body)
                                                 => {
@@ -251,9 +263,11 @@ impl<T, C> hyper::service::Service<(Request<Body>, C)> for Service<T, C> where
                                                         CONTENT_TYPE,
                                                         HeaderValue::from_str("application/json")
                                                             .expect("Unable to create Content-Type header for USERS_V1_GET_STATUS200"));
-                                                    let body = serde_json::to_string(&body).expect("impossible to fail to serialize");
+                                                    // let body = serde_json::to_string(&body).expect("impossible to fail to serialize");
+                                                    let body = serde_json::to_string("{'msg': 'Success!!!!'}").expect("impossible to fail to serialize");
                                                     *response.body_mut() = Body::from(body);
                                                 },
+                                                // ステータスコードが500
                                                 UsersV1GetResponse::Status500
                                                     (body)
                                                 => {
@@ -266,11 +280,13 @@ impl<T, C> hyper::service::Service<(Request<Body>, C)> for Service<T, C> where
                                                     *response.body_mut() = Body::from(body);
                                                 },
                                             },
+                                            // 失敗時のレスポンス
                                             Err(_) => {
                                                 // Application code returned an error. This should not happen, as the implementation should
                                                 // return a valid response.
                                                 *response.status_mut() = StatusCode::INTERNAL_SERVER_ERROR;
-                                                *response.body_mut() = Body::from("An internal error occurred");
+                                                let body = serde_json::to_string("{'msg': 'Success!!!!'}").expect("impossible to fail to serialize");
+                                                *response.body_mut() = Body::from(body);
                                             },
                                         }
 
