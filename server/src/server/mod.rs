@@ -235,13 +235,13 @@ impl<T, C> hyper::service::Service<(Request<Body>, C)> for Service<T, C> where
 
             // UsersV1Get - GET /v1/users
             hyper::Method::GET if path.matched(paths::ID_V1_USERS) => {
-                                println!("called /v1/users !!!");
+                                println!("called /src/server/mod.rs /v1/users!!!");
                                 
                                 // ↓この先のメソッドからハンドラを呼び出す
                                 let result = api_impl.users_v1_get(
                                         &context
                                     ).await;
-                                
+                                    
                                 // 空のレスポンス生成
                                 let mut response = Response::new(Body::empty());
                                 
@@ -251,6 +251,7 @@ impl<T, C> hyper::service::Service<(Request<Body>, C)> for Service<T, C> where
                                             HeaderValue::from_str((&context as &dyn Has<XSpanIdString>).get().0.clone().as_str())
                                                 .expect("Unable to create X-Span-ID header value"));
 
+                                        // result(Result型)の値に応じてレスポンスを切り替え
                                         match result {
                                             // 成功時のレスポンス(エラーレスポンス含む)
                                             Ok(rsp) => match rsp {

@@ -123,8 +123,9 @@ impl<T: Api<C> + Send + Sync, C: Clone + Send + Sync> ApiNoContext<C> for Contex
         &self,
         ) -> Result<UsersV1GetResponse, ApiError>
     {
+        println!("called lib.rs");
         let context = self.context().clone();
-        self.api().users_v1_get(&context).await
+        // self.api().users_v1_get(&context).await
     }
 
 }
