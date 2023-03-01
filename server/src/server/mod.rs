@@ -237,7 +237,7 @@ impl<T, C> hyper::service::Service<(Request<Body>, C)> for Service<T, C> where
             hyper::Method::GET if path.matched(paths::ID_V1_USERS) => {
                                 println!("called /v1/users !!!");
                                 
-                                // ↓ハンドラ？
+                                // ↓この先のメソッドからハンドラを呼び出す
                                 let result = api_impl.users_v1_get(
                                         &context
                                     ).await;
@@ -276,11 +276,16 @@ impl<T, C> hyper::service::Service<(Request<Body>, C)> for Service<T, C> where
                                                         CONTENT_TYPE,
                                                         HeaderValue::from_str("applicatoin/json")
                                                             .expect("Unable to create Content-Type header for USERS_V1_GET_STATUS500"));
+                                                    /*
+                                                    
+                                                        ここでエラーレスポンス取得関数（メソッド)を呼び出す？
+                                                    */
                                                     let body = body;
+                                                    
                                                     *response.body_mut() = Body::from(body);
                                                 },
                                             },
-                                            // 失敗時のレスポンス
+                                            // 失敗時のレスポンス(500エラーレスポンスなども返せない)
                                             Err(_) => {
                                                 // Application code returned an error. This should not happen, as the implementation should
                                                 // return a valid response.
